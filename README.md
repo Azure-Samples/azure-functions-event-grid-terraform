@@ -36,3 +36,5 @@ This is especially interesting as, for Event Grid Subscriptions, the target endp
 ## Running the sample via Azure DevOps
 By importing the [azure-piplines.yaml](./azure-pipelines.yaml) file in to an Azure DevOps pipeline, you'll get the same process as the above local execution.
 > Note: Be sure to change [the `PREFIX` variable](./azure-pipelines.yml#L14) to something unique to you to avoid naming collisions on storage & function apps
+
+<img src="img/azdo_run.png" alt="Azure DevOps successful run" width="200"/>
