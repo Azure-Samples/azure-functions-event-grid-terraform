@@ -6,8 +6,8 @@ pool:
 
 variables:
   LOCATION: westus
-  # Change this to something more unique before running!
-  PREFIX: azuresample
+  # Uncomment & change this to something more unique before running
+  # PREFIX: azuresample
 
 jobs:
 - job: SetupAzureTFBackend
