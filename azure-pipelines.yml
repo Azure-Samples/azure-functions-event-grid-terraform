@@ -1,0 +1,113 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  LOCATION: westus
+  # Change this to something more unique before running!
+  PREFIX: azuresample
+
+jobs:
+- job: SetupAzureTFBackend
+  displayName: Setup TFState Azure Backend
+  dependsOn: []
+  steps:
+  - task: AzureCLI@2
+    displayName: Create resource group
+    inputs:
+      azureSubscription: 'my-azure'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'az group create --name  $(PREFIX)-sample-rg --location $(LOCATION) --tags sample=azure-functions-event-grid-terraform'
+  - task: AzureCLI@2
+    displayName: Create tfstate storage account
+    inputs:
+      azureSubscription: 'my-azure'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'az storage account create --resource-group  $(PREFIX)-sample-rg --name $(PREFIX)tfstor --kind StorageV2 --tags sample=azure-functions-event-grid-terraform'
+
+  - task: AzureCLI@2
+    displayName: Create tfstate container
+    inputs:
+      azureSubscription: 'my-azure'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'az storage container create --name tfstate --account-name $(PREFIX)tfstor'
+
+- job: Deploy
+  displayName: Build and Deploy
+  dependsOn: 
+  - SetupAzureTFBackend
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Target .NET Core 3.1'
+    inputs:
+      packageType: sdk
+      version: 3.1.x
+      
+  - task: TerraformInstaller@0
+    displayName: 'Install Terraform'
+    inputs:
+      terraformVersion: '0.12.20'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Function App'
+    inputs:
+      command: 'build'
+      projects: '$(Build.SourcesDirectory)/src/**/*.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+
+  - task: CopyFiles@2
+    displayName: Copy Azure TF backend file to primary TF dir
+    inputs:
+      SourceFolder: 'infrastructure/terraform_backend'
+      Contents: '**'
+      TargetFolder: 'infrastructure/terraform'
+      OverWrite: true
+
+  - task: TerraformTaskV1@0
+    displayName: 'tf init'
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
+      backendServiceArm: 'my-azure'
+      backendAzureRmResourceGroupName: '$(PREFIX)-sample-rg'
+      backendAzureRmStorageAccountName: '$(PREFIX)tfstor'
+      backendAzureRmContainerName: 'tfstate'
+      backendAzureRmKey: 'terraform.tfstate'
+
+  - task: TerraformTaskV1@0
+    displayName: 'TF 🍔 "top bun" (tf apply -target module.functions -var "prefix=$(PREFIX)" -var "location=$(LOCATION)")'
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: '-target module.functions -var "prefix=$(PREFIX)" -var "location=$(LOCATION)"'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
+      environmentServiceNameAzureRM: 'my-azure'
+
+  - task: AzureFunctionApp@1
+    displayName: '🥓 Deploy Function App'
+    inputs:
+      azureSubscription: 'my-azure'
+      appType: 'functionApp'
+      appName: '$(PREFIX)-fxn'
+      package: '$(Build.ArtifactStagingDirectory)'
+      deploymentMethod: 'auto'
+
+  - task: TerraformTaskV1@0
+    displayName: 'TF 🍔 "bottom bun" (tf apply -var "prefix=$(PREFIX)" -var "location=$(LOCATION)")'
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: '-var "prefix=$(PREFIX)" -var "location=$(LOCATION)"'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
+      environmentServiceNameAzureRM: 'my-azure'

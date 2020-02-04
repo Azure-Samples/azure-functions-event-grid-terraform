@@ -1,6 +1,6 @@
 # Windows consumption function app
 resource "azurerm_app_service_plan" "fxnapp" {
-  name                = format("%s-fxn-plan-%s", var.prefix, var.environment)
+  name                = "${var.prefix}-fxn-plan"
   location            = var.location
   resource_group_name = var.resource_group_name
   kind                = "functionapp"
@@ -15,7 +15,7 @@ resource "azurerm_app_service_plan" "fxnapp" {
 
 # # Linux consumption function app
 # resource "azurerm_app_service_plan" "fxnapp" {
-#   name                = format("%s-fxn-lxplan-%s", var.prefix, var.environment)
+#   name                = "${var.prefix}-lxfxn-plan"
 #   location            = var.location
 #   resource_group_name = var.resource_group_name
 #   kind                = "functionapp"
@@ -31,7 +31,7 @@ resource "azurerm_app_service_plan" "fxnapp" {
 
 # # Windows Containers consumption function app
 # resource "azurerm_app_service_plan" "fxnapp" {
-#   name                = format("%s-fxn-wcplan-%s", var.prefix, var.environment)
+#   name                = "${var.prefix}-wcfxn-plan"
 #   location            = var.location
 #   resource_group_name = var.resource_group_name
 #   kind                = "functionapp"
@@ -48,7 +48,7 @@ resource "azurerm_app_service_plan" "fxnapp" {
 
 # Storage account for Azure Function
 resource "azurerm_storage_account" "fxnstor" {
-  name                     = format("%sfxnssa%s", var.prefix, var.environment)
+  name                     = "${var.prefix}fxnssa"
   resource_group_name      = var.resource_group_name
   location                 = var.location
   account_tier             = "Standard"
@@ -60,7 +60,7 @@ resource "azurerm_storage_account" "fxnstor" {
 }
 
 resource "azurerm_function_app" "fxn" {
-  name                      = format("%s-fxn-%s", var.prefix, var.environment)
+  name                      = "${var.prefix}-fxn"
   location                  = var.location
   resource_group_name       = var.resource_group_name
   app_service_plan_id       = azurerm_app_service_plan.fxnapp.id
