@@ -22,7 +22,8 @@ This is especially interesting as, for Event Grid Subscriptions, the target endp
 1. Open the repo in its VS Code Dev Container (this ensures you have all the right versions of the necessary tooling)
 1. run `az login` and `az account set --subscription <target subscription id>` to connect to your Azure Subscription
 1. `cd infrastructure/terraform`
-1. run `terraform apply -var 'prefix=<some unique prefix here>' -target module.storage -target module.functions`
+1. run `terraform init`
+1. run `terraform apply -var 'prefix=<some unique prefix here>' -target module.functions`
 1. `cd ../../src/FunctionApp`
 1. run `func azure functionapp publish <the name of the functionapp outputted by terraform apply> --csharp`
 1. `cd ../../infrastructure/terraform`
