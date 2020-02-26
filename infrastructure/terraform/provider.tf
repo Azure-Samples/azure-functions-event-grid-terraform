@@ -6,7 +6,7 @@ terraform {
 # Configure the Azure Provider
 provider "azurerm" {
   # It is recommended to pin to a given version of the Provider
-  version = "~> 1"
+  version = "~> 1.0"
 }
 
 # Make client_id, tenant_id, subscription_id and object_id variables
