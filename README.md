@@ -23,11 +23,11 @@ This is especially interesting as, for Event Grid Subscriptions, the target endp
 1. run `az login` and `az account set --subscription <target subscription id>` to connect to your Azure Subscription
 1. `cd infrastructure/terraform`
 1. run `terraform init`
-1. run `terraform apply -var 'prefix=<some unique prefix here>' -target module.functions`
+1. run `terraform apply -var prefix=<some unique prefix here> -target module.functions`
 1. `cd ../../src/FunctionApp`
 1. run `func azure functionapp publish <the name of the functionapp outputted by terraform apply> --csharp`
 1. `cd ../../infrastructure/terraform`
-1. run `terraform apply -var 'prefix=<same prefix as before>'`
+1. run `terraform apply -var prefix=<same prefix as before>`
 
 ### What it does
 - Tells terraform to run everything **except** the event grid subscription piece
@@ -36,7 +36,7 @@ This is especially interesting as, for Event Grid Subscriptions, the target endp
 
 ## Deploying via Azure DevOps
 By importing the [azure-piplines.yaml](./azure-pipelines.yaml) file in to an Azure DevOps pipeline, you'll get the same process as the above local execution.
-> Note: Be sure to uncomment change [the `PREFIX` variable](./azure-pipelines.yml#L10) to something unique to you to avoid naming collisions on storage & function apps
+> Note: Be sure to change [the `PREFIX` variable](./azure-pipelines.yml#L10) to something unique to you to avoid naming collisions on storage & function apps
 
 <img src="img/azdo_run.png" alt="Azure DevOps successful run" width="200"/>
 
