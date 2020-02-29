@@ -38,6 +38,17 @@ This is especially interesting as, for Event Grid Subscriptions, the target endp
 By importing the [azure-piplines.yaml](./azure-pipelines.yaml) file in to an Azure DevOps pipeline, you'll get the same process as the above local execution.
 > Note: Be sure to change [the `PREFIX` variable](./azure-pipelines.yml#L10) to something unique to you to avoid naming collisions on storage & function apps
 
+You'll need to create a Service Connection in Azure DevOps:
+1. Click **Project settings** (bottom left)
+1. Click **Service connections**
+1. Click **Create service connection**
+1. Select **Azure Resource Manager**
+1. Select **Service Principal (automatic)** 
+1. Enter Service Connection name `my-azure`
+1. Ensure **Grant access permissions to all pipelines** is checked
+
+Run the pipeline:
+
 <img src="img/azdo_run.png" alt="Azure DevOps successful run" width="200"/>
 
 ## Running the sample
