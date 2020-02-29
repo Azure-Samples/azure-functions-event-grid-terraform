@@ -44,7 +44,7 @@ You'll need to create a Service Connection in Azure DevOps:
 1. Click **Create service connection**
 1. Select **Azure Resource Manager**
 1. Select **Service Principal (automatic)** 
-1. Enter Service Connection name `my-azure`
+1. Enter **Service Connection name** `my-azure` (Note: you can leave **Resource group** blank)
 1. Ensure **Grant access permissions to all pipelines** is checked
 
 Run the pipeline:
