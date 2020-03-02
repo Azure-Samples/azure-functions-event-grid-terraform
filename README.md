@@ -20,19 +20,13 @@ This is especially interesting as, for Event Grid Subscriptions, the target endp
 
 ## Deploying locally
 1. Open the repo in its VS Code Dev Container (this ensures you have all the right versions of the necessary tooling)
-1. run `az login` and `az account set --subscription <target subscription id>` to connect to your Azure Subscription
-1. `cd infrastructure/terraform`
-1. run `terraform init`
-1. run `terraform apply -var prefix=<some unique prefix here> -target module.functions`
-1. `cd ../../src/FunctionApp`
-1. run `func azure functionapp publish <the name of the functionapp outputted by terraform apply> --csharp`
-1. `cd ../../infrastructure/terraform`
-1. run `terraform apply -var prefix=<same prefix as before>`
+1. run `./deploy.sh <target subscription id> <unique prefix>`
 
 ### What it does
-- Tells terraform to run everything **except** the event grid subscription piece
+- Logs in to Azure and connects to the target subscription
+- Tells terraform to deploy everything **except** the event grid subscription piece
 - Deploys the function app out to Azure so it's ready to answer the subscription wire-up that Terraform will do next
-- Tells terraform to apply **everything**, which issues the necessary changes to Azure to add the event grid subscription to an 'inbox' storage account
+- Tells terraform to deploy **everything**, which issues the necessary changes to Azure to add the event grid subscription to an 'inbox' storage account
 
 ## Deploying via Azure DevOps
 By importing the [azure-piplines.yaml](./azure-pipelines.yaml) file in to an Azure DevOps pipeline, you'll get the same process as the above local execution.
