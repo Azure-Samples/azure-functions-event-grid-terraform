@@ -31,12 +31,12 @@ resource "azurerm_application_insights" "logging" {
 }
 
 resource "azurerm_storage_account" "inbox" {
-  name                     = "${var.prefix}inboxsa"
-  resource_group_name      = azurerm_resource_group.sample.name
-  location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  account_kind             = "StorageV2"
+  name                      = "${var.prefix}inboxsa"
+  resource_group_name       = azurerm_resource_group.sample.name
+  location                  = var.location
+  account_tier              = "Standard"
+  account_replication_type  = "LRS"
+  account_kind              = "StorageV2"
   enable_https_traffic_only = true
   tags = {
     sample = "azure-functions-event-grid-terraform"
@@ -54,9 +54,9 @@ module "functions" {
 }
 
 resource "azurerm_eventgrid_event_subscription" "eventgrid_subscription" {
-  name  = "${var.prefix}-handlerfxn-egsub"
-  scope = azurerm_storage_account.inbox.id
-  labels = [ "azure-functions-event-grid-terraform" ]
+  name   = "${var.prefix}-handlerfxn-egsub"
+  scope  = azurerm_storage_account.inbox.id
+  labels = ["azure-functions-event-grid-terraform"]
   azure_function_endpoint {
     function_id = "${module.functions.function_id}/functions/${var.eventGridFunctionName}"
 

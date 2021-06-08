@@ -48,12 +48,12 @@ resource "azurerm_app_service_plan" "fxnapp" {
 
 # Storage account for Azure Function
 resource "azurerm_storage_account" "fxnstor" {
-  name                     = "${var.prefix}fxnssa"
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  account_kind             = "StorageV2"
+  name                      = "${var.prefix}fxnssa"
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
+  account_tier              = "Standard"
+  account_replication_type  = "LRS"
+  account_kind              = "StorageV2"
   enable_https_traffic_only = true
   tags = {
     sample = "azure-functions-event-grid-terraform"
@@ -73,8 +73,8 @@ resource "azurerm_function_app" "fxn" {
   }
   app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY = var.application_insights_instrumentation_key
-    SAMPLE_TOPIC_END_POINT       = var.sample_topic_endpoint
-    SAMPLE_TOPIC_KEY             = var.sample_topic_key
+    SAMPLE_TOPIC_END_POINT         = var.sample_topic_endpoint
+    SAMPLE_TOPIC_KEY               = var.sample_topic_key
   }
 
   # We ignore these because they're set/changed by Function deployment

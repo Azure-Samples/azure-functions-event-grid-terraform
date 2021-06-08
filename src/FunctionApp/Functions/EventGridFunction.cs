@@ -12,15 +12,14 @@ namespace Sample.FunctionApp.Functions
     {
         [FunctionName(nameof(StorageHandler))]
         public async Task StorageHandler(
-             [EventGridTrigger] EventGridEvent[] eventGridEvents,
-            [EventGrid(TopicEndpointUri = @"SAMPLE_TOPIC_END_POINT", TopicKeySetting = @"SAMPLE_TOPIC_KEY")]IAsyncCollector<EventGridEvent> outputEvents,
+            [EventGridTrigger] EventGridEvent[] eventGridEvents,
+            [EventGrid(TopicEndpointUri = @"SAMPLE_TOPIC_END_POINT", TopicKeySetting = @"SAMPLE_TOPIC_KEY")] IAsyncCollector<EventGridEvent> outputEvents,
             ILogger logger)
         {
             if (eventGridEvents == null)
             {
                 throw new ArgumentNullException("Null request received");
             }
-
 
             foreach (var ege in eventGridEvents)
             {
