@@ -40,7 +40,6 @@
 	"extensions": [
 		"hashicorp.terraform",
 		"ms-azuretools.vscode-azureterraform",
-		"ms-azuretools.vscode-docker",
 		"ms-azuretools.vscode-azurestorage",
 		"ms-azuretools.vscode-azureeventgrid",
 		"ms-azuretools.vscode-azurefunctions",

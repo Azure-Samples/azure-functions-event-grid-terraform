@@ -42,7 +42,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Opt out of Func CLI telemetry gathering
-ENV FUNCTIONS_CORE_TOOLS_TELEMETRY_OPTOUT=true
+#ENV FUNCTIONS_CORE_TOOLS_TELEMETRY_OPTOUT=true
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
