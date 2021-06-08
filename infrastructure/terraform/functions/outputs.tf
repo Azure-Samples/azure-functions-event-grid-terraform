@@ -1,7 +1,3 @@
-output "functionapp_endpoint_base" {
-  value = azurerm_function_app.fxn.default_hostname
-}
-
-output "function_app_name" {
-  value = azurerm_function_app.fxn.name
+output "function_id" {
+  value = azurerm_function_app.fxn.id
 }

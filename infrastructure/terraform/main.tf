@@ -24,6 +24,7 @@ resource "azurerm_application_insights" "logging" {
   location            = var.location
   resource_group_name = azurerm_resource_group.sample.name
   application_type    = "web"
+  retention_in_days   = 90
   tags = {
     sample = "azure-functions-event-grid-terraform"
   }
@@ -36,6 +37,7 @@ resource "azurerm_storage_account" "inbox" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   account_kind             = "StorageV2"
+  enable_https_traffic_only = true
   tags = {
     sample = "azure-functions-event-grid-terraform"
   }
@@ -51,16 +53,15 @@ module "functions" {
   sample_topic_key                         = azurerm_eventgrid_topic.sample_topic.primary_access_key
 }
 
-module "functionKeys" {
-  source              = "./functionKeys"
-  function_app_name   = module.functions.function_app_name
-  resource_group_name = azurerm_resource_group.sample.name
-}
-
 resource "azurerm_eventgrid_event_subscription" "eventgrid_subscription" {
   name  = "${var.prefix}-handlerfxn-egsub"
   scope = azurerm_storage_account.inbox.id
-  webhook_endpoint {
-    url = "https://${module.functions.functionapp_endpoint_base}/runtime/webhooks/eventgrid?functionName=${var.eventGridFunctionName}&code=${module.functionKeys.host_key}"
+  labels = [ "azure-functions-event-grid-terraform" ]
+  azure_function_endpoint {
+    function_id = "${module.functions.function_id}/functions/${var.eventGridFunctionName}"
+
+    # defaults, specified to avoid "no-op" changes when 'apply' is re-ran
+    max_events_per_batch              = 1
+    preferred_batch_size_in_kilobytes = 64
   }
 }

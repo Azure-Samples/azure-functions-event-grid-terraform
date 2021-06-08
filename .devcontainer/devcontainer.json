@@ -1,12 +1,16 @@
 {
-	"name": "C# (.NET Core 3.1), Azure CLI, Terraform, C++",
+	"name": "Azure Functions + Terraform",
 	"dockerFile": "Dockerfile",
 	// Use 'settings' to set *default* container specific settings.json values on container create. 
 	// You can edit these settings after create using File > Preferences > Settings > Remote.
 	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash",
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "/bin/bash"
+			}
+		},
 		"terraform.languageServer": {
-			"enabled": false
+			"enabled": true
 		},
 		"terraform.templateDirectory": "infrastructure/terraform"
 	},
@@ -34,8 +38,8 @@
 	// "remoteUser": "vscode",
 	// Add the IDs of extensions you want installed when the container is created in the array below.
 	"extensions": [
-		"mauve.terraform",
-		//"ms-azuretools.vscode-azureterraform",
+		"hashicorp.terraform",
+		"ms-azuretools.vscode-azureterraform",
 		"ms-azuretools.vscode-docker",
 		"ms-azuretools.vscode-azurestorage",
 		"ms-azuretools.vscode-azureeventgrid",
@@ -43,8 +47,6 @@
 		"ms-azure-devops.azure-pipelines",
 		"ms-vscode.azurecli",
 		"ms-vscode.azure-account",
-		"ms-vscode.powershell",
-		"ms-vscode.csharp",
-		"leopotam.csharpfixformat"
+		"ms-dotnettools.csharp"
 	]
 }
