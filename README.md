@@ -5,7 +5,6 @@ languages:
 - yaml
 products:
 - dotnet
-- dotnet-core
 - azure-functions
 - azure-event-grid
 - azure-storage
